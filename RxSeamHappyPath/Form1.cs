@@ -27,8 +27,34 @@ namespace RxSeamHappyPath
             txtJson.Text = "";
             gridJson.DataSource = null;
 
-            //Call RxStream Asyc so we don' lock the form
-            CallRxStreamAsync();
+            if (ValidAppConfig())
+            {
+                //Call RxStream Asyc so we don' lock the form
+                CallRxStreamAsync();
+            }
+        }
+
+        private bool ValidAppConfig()
+        {
+            bool valid = true;
+            string url = ConfigurationSettings.AppSettings["url"].ToString();
+            string tenantId = ConfigurationSettings.AppSettings["tenantId"].ToString();
+            string apiKey = ConfigurationSettings.AppSettings["apiKey"].ToString();
+
+            if (url == "http://XXXX/api/")
+                valid = false;
+
+            if (tenantId == "XXXX")
+                valid = false;
+
+            if (apiKey == "XXXX")
+                valid = false;
+
+            if (!valid)
+                lblOutput.Text =  "Please check App.Config";
+
+
+            return valid;
         }
 
         private async void CallRxStreamAsync()
